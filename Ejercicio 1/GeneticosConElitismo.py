@@ -76,7 +76,6 @@ class Cromosoma:
         self.fitness = self.funcObjetivo() / total
         return self.fitness
 
-
 def generarPoblacion():
     poblacion = []
     for _ in range(poblacionInicial):
@@ -163,6 +162,19 @@ def seleccion(poblacion):
             nuevaGeneracion.append(c)
     return nuevaGeneracion
 
+#Seleccion por medio de Torneo
+def torneo(poblacion):
+    nroCompetidores = 3     #el nro de cromosomas que van a participar en el torneo
+    #sumFitness = sum(crom.fitness for crom in poblacion) #suma de todas las funciones fitness
+    random.shuffle(poblacion)
+    competidores = []
+    for i in range(nroCompetidores): 
+        competidores.append(poblacion[i]) #meto los tres primeros cromosomas de una poblacion en la lista competidores
+    competidores.sort(key = lambda cromosoma: cromosoma.fitness, reverse = True) #ordena los cromosomas de forma descendiente por fitness
+    return competidores[0]
+
+
+
 
 # Devuelve un cromosoma utilizando el metodo de la ruleta
 def ruleta(poblacion):
@@ -188,7 +200,7 @@ def crossover(poblacion):
                 nuevaGeneracion.append(cElit)
                 poblacion.remove(cElit)
         rango = poblacionInicial - (int)(poblacionInicial * 0.2)
-        # poblacion = random.shuffle(poblacion)
+        random.shuffle(poblacion)
     for _ in range((int)(rango / 2)):
         padre1 = poblacion.pop(random.randrange(0,len(poblacion)))
         padre2 = poblacion.pop(random.randrange(0,len(poblacion)))
